@@ -60,10 +60,26 @@ export function useStorageInput({
         })
       );
 
-      if (multiple) {
-        input.onChange(values);
-      } else {
+      if (!multiple) {
+        if (input.value) {
+          try {
+            await Storage.remove(input.value.s3Key, {
+              level: storageOptions.level || "public",
+            });
+          } catch (e) {
+            console.log(e);
+          }
+        }
+
         input.onChange(values[0]);
+
+        return;
+      }
+
+      if (input.value) {
+        input.onChange([...input.value, ...values]);
+      } else {
+        input.onChange(values);
       }
     } catch (e) {
       console.log(e);
