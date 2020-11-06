@@ -20,5 +20,8 @@ module.exports = {
   },
   plugins: ["@typescript-eslint"],
   ignorePatterns: [".eslintrc.js", "node_modules/", "build/", "coverage/"],
-  rules: {},
+  rules: {
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-unused-vars": 0
+  },
 };
