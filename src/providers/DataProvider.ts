@@ -21,6 +21,7 @@ import {
 } from "ra-core";
 import { Filter } from "./Filter";
 import { Pagination } from "./Pagination";
+import { Parser } from "./Parser";
 
 export interface Operations {
   queries: Record<string, string>;
@@ -29,6 +30,8 @@ export interface Operations {
 
 export interface DataProviderOptions {
   authMode?: GRAPHQL_AUTH_MODE;
+  storageBucket?: string;
+  storageRegion?: string;
 }
 
 const defaultOptions: DataProviderOptions = {
@@ -48,7 +51,10 @@ export class DataProvider {
 
     this.queries = operations.queries;
     this.mutations = operations.mutations;
-    this.authMode = <GRAPHQL_AUTH_MODE>optionsBag.authMode;
+    this.authMode = optionsBag.authMode as GRAPHQL_AUTH_MODE;
+
+    Parser.storageBucket = optionsBag.storageBucket;
+    Parser.storageRegion = optionsBag.storageRegion;
   }
 
   public getList = async <RecordType>(
@@ -191,8 +197,10 @@ export class DataProvider {
     const queryName = this.getQueryName("create", resource);
     const query = this.getQuery(queryName);
 
+    const parsedData = Parser.parse(params.data);
+
     // Executes the query
-    const queryData = (await this.graphql(query, { input: params.data }))[
+    const queryData = (await this.graphql(query, { input: parsedData }))[
       queryName
     ];
 
@@ -215,8 +223,12 @@ export class DataProvider {
     delete data.createdAt;
     delete data.updatedAt;
 
+    const parsedData = Parser.parse(data);
+
     // Executes the query
-    const queryData = (await this.graphql(query, { input: data }))[queryName];
+    const queryData = (await this.graphql(query, { input: parsedData }))[
+      queryName
+    ];
 
     return {
       data: queryData,
@@ -239,12 +251,14 @@ export class DataProvider {
     delete data.createdAt;
     delete data.updatedAt;
 
+    const parsedData = Parser.parse(data);
+
     const ids = [];
 
     // Executes the queries
     for (const id of params.ids) {
       try {
-        await this.graphql(query, { input: { ...data, id } });
+        await this.graphql(query, { input: { ...parsedData, id } });
         ids.push(id);
       } catch (e) {
         console.log(e);

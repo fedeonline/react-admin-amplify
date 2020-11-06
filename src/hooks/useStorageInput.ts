@@ -1,5 +1,5 @@
 import { Storage } from "@aws-amplify/storage";
-import { Children, ReactElement, ReactNode } from "react";
+import React, { Children, ReactElement, ReactNode } from "react";
 import { useInput } from "react-admin";
 import { v4 as uuid } from "uuid";
 
@@ -29,6 +29,12 @@ export function useStorageInput({
   children,
 }: Input): Output {
   const { input } = useInput({ source });
+
+  React.useEffect(() => {
+    if (Array.isArray(input.value) && input.value.length === 0) {
+      input.onChange(undefined);
+    }
+  }, [input]);
 
   async function onDropAccepted(files: File[], event: any) {
     try {
