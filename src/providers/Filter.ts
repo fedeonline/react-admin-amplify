@@ -1,4 +1,4 @@
-const sortOperators = ["eq", "le", "lt", "ge", "gt", "beginsWith"];
+const sortOperators = ["eq", "le", "lt", "ge", "gt", "between", "beginsWith"];
 const bannedKeyNames = ["sortDirection", "limit", "nextIndex"];
 
 export class Filter {
@@ -37,6 +37,11 @@ export class Filter {
     // Case when there is only the hash key
     if (this.isObjectOfLength(queryParams, 1)) {
       const onlyParam = Object.values(queryParams)[0];
+      const onlyKey = Object.keys(queryParams)[0];
+
+      if (onlyKey === 'filter') {
+        return queryParams;
+      }
 
       if (this.isHashKeyValid(onlyParam)) {
         return queryParams;

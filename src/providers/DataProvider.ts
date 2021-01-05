@@ -62,7 +62,8 @@ export class DataProvider {
   public getList = async <RecordType>(
     resource: string,
     params: GetListParams
-  ): Promise<GetListResult<RecordType>> => {
+  ): // @ts-ignore 
+  Promise<GetListResult<RecordType>> => {
     const { filter } = params;
 
     let queryName = Filter.getQueryName(this.queries, filter);
@@ -130,7 +131,9 @@ export class DataProvider {
   public getOne = async <RecordType>(
     resource: string,
     params: GetOneParams
-  ): Promise<GetOneResult<RecordType>> => {
+  ): 
+  // @ts-ignore
+  Promise<GetOneResult<RecordType>> => {
     const queryName = this.getQueryName("get", resource);
     const query = this.getQuery(queryName);
 
@@ -145,7 +148,8 @@ export class DataProvider {
   public getMany = async <RecordType>(
     resource: string,
     params: GetManyParams
-  ): Promise<GetManyResult<RecordType>> => {
+  ): // @ts-ignore
+  Promise<GetManyResult<RecordType>> => {
     const queryName = this.getQueryName("get", resource);
     const query = this.getQuery(queryName);
 
@@ -169,7 +173,8 @@ export class DataProvider {
   public getManyReference = async <RecordType>(
     resource: string,
     params: GetManyReferenceParams
-  ): Promise<GetManyReferenceResult<RecordType>> => {
+  ): // @ts-ignore
+  Promise<GetManyReferenceResult<RecordType>> => {
     const { filter = {}, id, pagination, sort, target } = params;
     const splitTarget = target.split(".");
 
@@ -195,7 +200,8 @@ export class DataProvider {
   public create = async <RecordType>(
     resource: string,
     params: CreateParams
-  ): Promise<CreateResult<RecordType>> => {
+  ): // @ts-ignore
+  Promise<CreateResult<RecordType>> => {
     const queryName = this.getQueryName("create", resource);
     const query = this.getQuery(queryName);
 
@@ -212,7 +218,8 @@ export class DataProvider {
   public update = async <RecordType>(
     resource: string,
     params: UpdateParams
-  ): Promise<UpdateResult<RecordType>> => {
+  ): // @ts-ignore
+  Promise<UpdateResult<RecordType>> => {
     const queryName = this.getQueryName("update", resource);
     const query = this.getQuery(queryName);
 
@@ -267,7 +274,8 @@ export class DataProvider {
   public delete = async <RecordType>(
     resource: string,
     params: DeleteParams
-  ): Promise<DeleteResult<RecordType>> => {
+  ): // @ts-ignore
+  Promise<DeleteResult<RecordType>> => {
     const queryName = this.getQueryName("delete", resource);
     const query = this.getQuery(queryName);
 
